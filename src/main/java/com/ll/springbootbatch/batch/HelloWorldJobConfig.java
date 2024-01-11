@@ -1,9 +1,10 @@
-package com.ll.springbootbatch;
+package com.ll.springbootbatch.batch;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
+import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.core.step.tasklet.Tasklet;
@@ -20,6 +21,7 @@ public class HelloWorldJobConfig {
     public Job helloWorldJob(JobRepository jobRepository, Step step1) {
         return new JobBuilder("helloWorldJob", jobRepository)
                 .start(step1)
+                .incrementer(new RunIdIncrementer())
                 .build();
     }
 
@@ -34,6 +36,7 @@ public class HelloWorldJobConfig {
     public Tasklet testTasklet() {
         return ((contribution, chunkContext) -> {
             log.info("Hello World");
+            System.out.println("Hello World");
             return RepeatStatus.FINISHED;
         });
     }
